@@ -1,8 +1,27 @@
 <template>
   <div>
-    <!-- TODO: 2 - Use a named slot to specify how the stock heading should be rendered, from here -->
-    <!-- TODO: 3 - Use scoped slots to specify how the button should be rendered, from here -->
-    <app-stock v-for="stock in stocks" :key="stock.id" :stock="stock" />
+    <app-stock v-for="stock in stocks" :key="stock.id" :stock="stock" >
+
+      <template v-slot:heading>
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            {{ stock.name }}
+            <small>(Price: {{ stock.price }})</small>
+          </h3>
+        </div>
+      </template>
+
+      <template v-slot="{ insufficient, quantity, clickHandler }">
+        <div class="pull-right">
+            <button
+              class="btn btn-success"
+              :disabled="insufficient || quantity <= 0 || !Number.isInteger(quantity)"
+              @click="clickHandler"
+            >{{ insufficient ? 'Insufficient' : 'Buy' }}</button>
+        </div>
+      </template>
+
+    </app-stock>
   </div>
 </template>
 

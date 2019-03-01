@@ -30,18 +30,10 @@
 </template>
 
 <script>
+import stocksMixin from '../../mixins/stocks-mixin.js';
+
 export default {
-    props: {
-        stock: {
-            type: Object,
-            required: true,
-        },
-    },
-    data() {
-        return {
-            quantity: 0,
-        };
-    },
+    mixins: [ stocksMixin ],
     computed: {
         insufficientQuantity() {
             return this.quantity > this.stock.quantity;

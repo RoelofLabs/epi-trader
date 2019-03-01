@@ -1,12 +1,9 @@
 <template>
   <div class="col-sm-6 col-md-4">
     <div class="panel panel-success">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          {{ stock.name }}
-          <small>(Price: {{ stock.price }})</small>
-        </h3>
-      </div>
+
+      <slot name="heading"/>
+
       <div class="panel-body">
         <div class="pull-left">
           <input
@@ -17,32 +14,18 @@
             :class="{ danger : insufficientFunds }"
           >
         </div>
-        <div class="pull-right">
-          <button
-            class="btn btn-success"
-            :disabled="insufficientFunds || quantity <= 0 || !Number.isInteger(quantity)"
-            @click="buyStock"
-          >{{ insufficientFunds ? 'Insufficient' : 'Buy' }}</button>
-        </div>
+
+        <slot :insufficient="insufficientFunds" :quantity="quantity" :click-handler="buyStock"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import stocksMixin from '../../mixins/stocks-mixin.js';
+
 export default {
-    // TODO: 1 - Move the duplicated code from Stock and Portfolio to a mixin
-    props: {
-        stock: {
-            type: Object,
-            required: true,
-        },
-    },
-    data() {
-        return {
-            quantity: 0,
-        };
-    },
+    mixins: [ stocksMixin ],
     computed: {
         funds() {
             return this.$store.getters.funds;
