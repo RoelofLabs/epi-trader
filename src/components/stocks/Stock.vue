@@ -4,7 +4,7 @@
       <div class="panel-heading">
         <h3 class="panel-title">
           {{ stock.name }}
-          <small>(Price: {{ stock.price }})</small>
+          <small>(Price: {{ stock.price | currency }})</small>
         </h3>
       </div>
       <div class="panel-body">
@@ -13,15 +13,16 @@
             v-model.number="quantity"
             type="number"
             class="form-control"
+            :class="{'insufficient-funds': insufficientFunds}"
             placeholder="Quantity"
           >
         </div>
         <div class="pull-right">
           <button
             class="btn btn-success"
-            :disabled="quantity <= 0 || !Number.isInteger(quantity)"
+            :disabled="quantity <= 0 || !Number.isInteger(quantity) || insufficientFunds"
             @click="buyStock"
-          >Buy</button>
+          >{{insufficientFunds ? 'Insufficent' : 'Buy'}}</button>
         </div>
       </div>
     </div>
@@ -46,11 +47,7 @@ export default {
             return this.$store.getters.funds;
         },
         insufficientFunds() {
-            // TODO: 2 - If there are insufficient funds:
-            // 1. Disable the button
-            // 2. Update the button text
-            // 3. Add a red border to the input
-            return false;
+            return this.funds < this.quantity * this.stock.price;
         },
     },
     methods: {
@@ -68,3 +65,10 @@ export default {
     },
 };
 </script>
+
+
+<style scope>
+  .insufficient-funds {
+    border: 2px solid red;
+  }
+</style>
