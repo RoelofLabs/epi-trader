@@ -1,14 +1,21 @@
 <template>
   <div>
-    <h1>The Stocks component</h1>
+    <app-stock v-for="stock in stocks" :key="stock.id" :stock="stock"></app-stock>
   </div>
 </template>
 
 <script>
-import stocks from '../../data/stocks-data';
+import stocksData from '../../data/stocks-data';
+import Stock from './Stock';
 
-// TODO: 3 - Add Stock component to Stocks
 export default {
-
+  data() {
+    return {
+      stocks: stocksData
+    };
+  },
+  components: {
+    appStock: Stock,
+  }
 };
 </script>
